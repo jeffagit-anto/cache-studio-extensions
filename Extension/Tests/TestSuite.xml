@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Studio.Extension.Tests.TestSuite">
+<Description><![CDATA[
+<h3>Studio.Extension Unit Tests suite</h3>
+MUST SEE <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Studio.Extension.Tests.TestCase">Test Suite Entry Point</a> before run
+<example>DEV>d ##class(Studio.Extension.Tests.TestSuite).Run()</example>]]></Description>
+<Super>Studio.Extension.Tests.TestCase</Super>
+<TimeCreated>63509,64315.651609</TimeCreated>
+
+<Method name="OnBeforeAllTests">
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	k ^StudioExtensionFileSync
+	k ^DEBUG
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="OnAfterAllTests">
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	k ^StudioExtensionFileSync
+	k ^DEBUG
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="TestUtilsGetProjectName">
+<Description>
+Tests for Discovery.Dec.BC.CatalogUpdate</Description>
+<Implementation><![CDATA[
+	// at init, CurrentProjectName is ""
+	d $$$AssertEquals(##class(Studio.Extension.Utils).GetCurrentProjectName(),"","##class(Studio.Extension.Utils).GetCurrentProjectName(() (should be """")")
+	// and ExternalName returns ""
+	d $$$AssertEquals(##class(Studio.Extension.Utils).ExternalName("FooPackage.Bar.cls"),"","##class(Studio.Extension.Utils).GetCurrentProjectName(() (should be """")")
+	// set CurrentProjectName
+	d ##class(Studio.Extension.Utils).SetCurrentProjectName("currProjName.prj")
+	// now ExternalName returns something meaningful
+	d $$$AssertEquals(##class(Studio.Extension.Utils).ExternalName("FooPackage.Bar.cls"),"/Users/jantonio/sources/currProjName/cls/FooPackage/Bar.xml","##class(Studio.Extension.Utils).GetCurrentProjectName(() (should be ""/Users/jantonio/sources/currProjName/cls/FooPackage/Bar.xml"")")
+]]></Implementation>
+</Method>
+</Class>
+</Export>

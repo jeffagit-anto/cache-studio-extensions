@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Studio.Extension.Tests.TestCase">
+<Description><![CDATA[
+<h3>Entry point for Studio.Extension's Unit Tests</h3>
+It is MANDATORY to:
+<li>run the whole <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Studio.Extension.Tests.TestSuite"> TestSuite</a> before any <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Discovery.Dec"> Discovery.Dec</a>'s code modification</li>
+<li>add/modify tests to <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Studio.Extension.Tests.TestSuite"> TestSuite</a> while any <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Discovery.Dec"> Discovery.Dec</a>'s code modification</li>
+<li>run the whole <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Studio.Extension.Tests.TestSuite"> TestSuite</a> after any <a href="%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=DIS&CLASSNAME=Discovery.Dec"> Discovery.Dec</a>'s code modification</li>
+<hr/>
+Setup (Mac OS dependant):
+<example>sudo mkdir -p /usr/local/enscur/mgr/dev/Studio/Extension/Utils/Tests</example>
+where <code>/usr/local/enscur/mgr</code> is your cache's instance mgr directory
+and <code>/usr/local/enscur/mgr/dev</code> assume that you are deploying to the "DEV" namespace (recommended).
+<hr/>]]></Description>
+<Super>%UnitTest.TestCase</Super>
+<TimeCreated>63509,63733.311169</TimeCreated>
+
+<Method name="Run">
+<Description>
+Helper method</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+    set testSuite = "Studio.Extension.Utils.Tests"
+    
+    // set up ^UnitTestRoot if not already set
+    if '$data(^UnitTestRoot) {
+    	set mainFolder = "" 
+	    set st = ##class(%File).CreateDirectoryChain(mainFolder _ testSuite)
+	    if $$$ISOK(st) { set ^UnitTestRoot = mainFolder }
+	    else { write !, "UnitTestRoot folder could not be created." }
+    }
+    
+    set testCase = ..%ClassName(1) // this test case
+    set test = testSuite _ ":" _ testCase
+	set quals = "/noload/norecursive/nodelete"
+    do ##class(%UnitTest.Manager).RunTest(test, quals)
+    return
+]]></Implementation>
+</Method>
+</Class>
+</Export>
