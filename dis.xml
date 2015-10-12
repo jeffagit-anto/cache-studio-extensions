@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Project name="dis" LastModified="2015-10-12 10:11:06.453748">
+  <Items>
+    <ProjectItem name="Discovery.Dec.BC.CatalogProduct" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.CatalogProductUpdate" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.Customer" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.CustomerOrder" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.OrderUnit" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.Update" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BC.ViewPointUpdate" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BO.ToCatalog" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BO.ToExternalProvider" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BP.CatalogManagement" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BP.ViewPointManagement" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BS.FromCustomer" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BS.FromManager" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.BS.REST.Utils" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.CatalogResponse" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.CatalogUpdateReq" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.CustomerOrderReq" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.ExternalCatalogResponse" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.OrderReq" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Msg.ViewPointUpdateReq" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.OrderRouterRoutingRule" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Production" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Tests.TestCase" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.Tests.TestSuite" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.ui.html.Application" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.ui.html.HomePage" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.ui.html.NewClass1" type="CLS"></ProjectItem>
+    <ProjectItem name="Discovery.Dec.ui.html.baseTemplate" type="CLS"></ProjectItem>
+    <ProjectItem name="Studio.Extension.FileSync" type="CLS"></ProjectItem>
+    <ProjectItem name="Studio.Extension.Tests.TestCase" type="CLS"></ProjectItem>
+    <ProjectItem name="Studio.Extension.Tests.TestSuite" type="CLS"></ProjectItem>
+    <ProjectItem name="Studio.Extension.Utils" type="CLS"></ProjectItem>
+  </Items>
+</Project>
+</Export>
