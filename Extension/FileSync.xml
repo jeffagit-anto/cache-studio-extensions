@@ -98,7 +98,9 @@ tool can see what changes we have made.</Description>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
 	// do not export a generated class
-	Quit:(..IsCLS(InternalName) && ##class(%Dictionary.ClassDefinition).%OpenId(InternalName).GeneratedBy'="") $$$OK
+	Set classDef = ##class(%Dictionary.ClassDefinition).%OpenId(InternalName)
+	Quit:(..IsCLS(InternalName) && classDef.GeneratedByIsDefined()) $$$OK
+	
  Set filename=##class(Studio.Extension.Utils).ExternalName(InternalName)
  If filename="" Quit $$$OK
 
