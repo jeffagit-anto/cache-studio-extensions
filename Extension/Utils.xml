@@ -82,6 +82,14 @@ This package's subitems (classes, sub-packages, and so on) will be sync'ed below
 ]]></Implementation>
 </Method>
 
+<Method name="IsCLS">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>InternalName:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[	Quit "cls"=..GetExtension(InternalName)
+]]></Implementation>
+</Method>
+
 <UDLText name="T">
 <Content><![CDATA[
 /*

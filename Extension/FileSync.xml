@@ -51,6 +51,16 @@ pure wrapper for ##class(Studio.Extension.Utils).IsPKG(InternalName)</Descriptio
 ]]></Implementation>
 </Method>
 
+<Method name="IsCLS">
+<Description>
+pure wrapper for ##class(Studio.Extension.Utils).IsCLS(InternalName)</Description>
+<FormalSpec>InternalName:%String</FormalSpec>
+<Private>1</Private>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[	Quit ##class(Studio.Extension.Utils).IsCLS(InternalName)
+]]></Implementation>
+</Method>
+
 <Method name="OnBeforeLoad">
 <Description>
 depending on the document's type :
@@ -87,7 +97,8 @@ tool can see what changes we have made.</Description>
 <FormalSpec>InternalName:%String,Object:%RegisteredObject</FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
-
+	// do not export a generated class
+	Quit:(..IsCLS(InternalName) && ##class(%Dictionary.ClassDefinition).%OpenId(InternalName).GeneratedBy'="") $$$OK
  Set filename=##class(Studio.Extension.Utils).ExternalName(InternalName)
  If filename="" Quit $$$OK
 
