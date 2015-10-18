@@ -37,7 +37,14 @@ Tests for Discovery.Dec.BC.CatalogUpdate</Description>
 	// set CurrentProjectName
 	d ##class(Studio.Extension.Utils).SetCurrentProjectName("currProjName.prj")
 	// now ExternalName returns something meaningful
-	d $$$AssertEquals(##class(Studio.Extension.Utils).ExternalName("FooPackage.Bar.cls"),"/Users/jantonio/sources/currProjName/cls/FooPackage/Bar.xml","##class(Studio.Extension.Utils).GetCurrentProjectName(() (should be ""/Users/jantonio/sources/currProjName/cls/FooPackage/Bar.xml"")")
+	d $$$AssertEquals(##class(Studio.Extension.Utils).ExternalName("FooPackage.Bar.cls"),"/Users/jantonio/GitHub/currProjName/cls/FooPackage/Bar.xml","##class(Studio.Extension.Utils).GetCurrentProjectName(() (should be ""/Users/jantonio/GitHub/currProjName/cls/FooPackage/Bar.xml"")")
+]]></Implementation>
+</Method>
+
+<Method name="TestUtilsIsGeneratedClass">
+<Implementation><![CDATA[
+	// at init, CurrentProjectName is ""
+	d $$$AssertNotTrue(##class(Studio.Extension.Utils).IsGeneratedClass("Studio.Extension.Tests.TestSuite"),"##class(Studio.Extension.Utils).IsGeneratedClass(""Studio.Extension.Tests.TestSuite"") (should be Not True)")
 ]]></Implementation>
 </Method>
 </Class>
