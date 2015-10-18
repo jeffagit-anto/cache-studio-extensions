@@ -44,7 +44,9 @@ Tests for Discovery.Dec.BC.CatalogUpdate</Description>
 <Method name="TestUtilsIsGeneratedClass">
 <Implementation><![CDATA[
 	// at init, CurrentProjectName is ""
-	d $$$AssertNotTrue(##class(Studio.Extension.Utils).IsGeneratedClass("Studio.Extension.Tests.TestSuite"),"##class(Studio.Extension.Utils).IsGeneratedClass(""Studio.Extension.Tests.TestSuite"") (should be Not True)")
+	d $$$AssertNotTrue(##class(Studio.Extension.Utils).IsGeneratedClass("Studio.Extension.Tests.TestSuite.cls"),"##class(Studio.Extension.Utils).IsGeneratedClass(""Studio.Extension.Tests.TestSuite"") (should be Not True)")
+	d $$$AssertTrue(##class(Studio.Extension.Utils).IsGeneratedClass("Studio.Extension.Tests.TestSuite.Thread21.cls"),"##class(Studio.Extension.Utils).IsGeneratedClass(""Studio.Extension.Tests.TestSuite"") (should be Not True)")
+	d $$$AssertTrue(##class(Studio.Extension.Utils).IsGeneratedClass("Studio.Extension.Tests.TestSuite.Context.cls"),"##class(Studio.Extension.Utils).IsGeneratedClass(""Studio.Extension.Tests.TestSuite"") (should be Not True)")
 ]]></Implementation>
 </Method>
 </Class>
