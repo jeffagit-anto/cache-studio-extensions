@@ -55,6 +55,8 @@ this menu item from the list totally, 0 will gray the menu item out and the defa
 </Method>
 
 <Method name="OnSourceMenuItem">
+<Description>
+control the display of static source menu</Description>
 <FormalSpec><![CDATA[name:%String,&Enabled:%String,&DisplayName:%String]]></FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
@@ -76,6 +78,8 @@ this menu item from the list totally, 0 will gray the menu item out and the defa
 </Method>
 
 <Method name="OnSourceMenuContextItem">
+<Description>
+control the display of contextual source menu</Description>
 <FormalSpec><![CDATA[itemName:%String,menuItemName:%String,&Enabled:%String,&DisplayName:%String]]></FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
