@@ -5,7 +5,6 @@
 <p>SAMPLES / STudio.SourceControl.Example Fork</p>
 This class is meant to synchronize Caché Documents with a FileSystem trough Studio hooks
 Source Control may then be implemented through FS integration and adequate client
-Typical use case is : sync code on a shared filesystem then use git/github from any machine that get share access
 Note : initialcode must be exploded on a FS, and the path to this rot directory need to be setted]]></Description>
 <ProcedureBlock>1</ProcedureBlock>
 <Super>%Studio.SourceControl.Base</Super>
