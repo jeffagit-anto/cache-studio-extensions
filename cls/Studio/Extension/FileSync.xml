@@ -10,12 +10,87 @@ Note : initialcode must be exploded on a FS, and the path to this rot directory 
 <Super>%Studio.SourceControl.Base</Super>
 <TimeCreated>59241,41418</TimeCreated>
 
-<UDLText name="T">
-<Content><![CDATA[
-// TODO : inherit from %Studio.Extension.Base, do not implement menu
+<XData name="Menu">
+<Data><![CDATA[
+<MenuBase>
+<Menu Name="%SourceMenu" Type="0">
+<MenuItem Name="%Settings" />
+<MenuItem Name="%CreateRepo" Save = "001"/>
+<MenuItem Name="%Clone" Save = "001"/>
+</Menu>
+<Menu Name="%SourceMenuContext" Type="1">
+<MenuItem Name="%AddToSC"/>
+</Menu>
+</MenuBase>
+]]></Data>
+</XData>
 
-]]></Content>
-</UDLText>
+<Method name="OnMenuItem">
+<Description><![CDATA[
+This is called for every menu item returned to Studio to allow the menu to be enabled/disabled without
+having to write a custom query for <query>MenuItems</query>. The <var>DisplayName</var> of this menu is
+also passed by reference and this may be modIfied to change the appearance of this menu item. The <var>MenuName</var>
+is the main menu name then the submenu name separated by a ','. If <var>Enabled</var> is Set to -1 then it will remove
+this menu item from the list totally, 0 will gray the menu item out and the default 1 will display the menu item as normal.]]></Description>
+<FormalSpec><![CDATA[MenuName:%String,InternalName:%String,SelectedText:%String,&Enabled:%Boolean,&DisplayName:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	#dim menu As %String= $Piece(MenuName,",")
+	#dim name As %String = $Piece(MenuName,",",2)
+	If menu = "%SourceMenuContext", name = "" {
+		Set DisplayName = "Git"
+	}
+	If menu = "%SourceMenu", name = "" {
+		Set DisplayName = "Git"
+	}
+	#dim ec As %Status = $$$OK
+
+	If menu = "%SourceMenu" {
+		Set ec = ..OnSourceMenuItem(name, .Enabled, .DisplayName)
+	}ElseIf menu = "%SourceMenuContext" {
+		Set ec = ..OnSourceMenuContextItem(InternalName, name, .Enabled, .DisplayName)
+	}
+	Quit ec
+]]></Implementation>
+</Method>
+
+<Method name="OnSourceMenuItem">
+<FormalSpec><![CDATA[name:%String,&Enabled:%String,&DisplayName:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	If name = "%Settings" {
+		// We always show Settings
+		Set DisplayName = "Settings"
+	}
+	//TODO check If project is Set before show the following entries
+	 ElseIf name = "%CreateRepo" {
+		Set DisplayName = "Create Repo"
+	} ElseIf name = "%Clone" {
+		Set DisplayName = "Clone"
+	}
+	
+	Set Enabled=1
+	
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="OnSourceMenuContextItem">
+<FormalSpec><![CDATA[itemName:%String,menuItemName:%String,&Enabled:%String,&DisplayName:%String]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	//TODO check If project is Set before show the following entries
+	If menuItemName="%AddToSC" {
+		Set DisplayName = "Add to SourceControl"
+		Set Enabled = 1
+	}
+	Else{
+		Set Enabled = 0
+	}
+
+	Quit $$$OK
+]]></Implementation>
+</Method>
 
 <Method name="Login">
 <Description>
@@ -53,8 +128,8 @@ pure wrapper for ##class(Studio.Extension.Utils).IsPKG(InternalName)</Descriptio
 <Method name="OnBeforeLoad">
 <Description>
 depending on the document's type :
-- PRJ : set the ^FileSync("current_project")
-- Everything (PRJ included) : if file-to-synchronize exists then it takes precedence on Caché Document; if not do nothing</Description>
+- PRJ : Set the ^FileSync("current_project")
+- Everything (PRJ included) : If file-to-synchronize exists then it takes precedence on Caché Document; If not do nothing</Description>
 <FormalSpec>InternalName:%String</FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
@@ -91,7 +166,7 @@ tool can see what changes we have made.</Description>
  If filename="" Quit $$$OK
 
  #; Call the export function
- Set sc=$system.OBJ.Export(InternalName,filename,"-d/diffexport")
+ Set sc=$system.OBJ.Export(InternalName,filename,"-d/dIffexport")
  If $$$ISOK(sc) {
  Write !,"Exported '",InternalName,"' to file '",filename,"'"
  } Else {
@@ -104,7 +179,7 @@ tool can see what changes we have made.</Description>
 <Method name="OnAfterCompile">
 <Description><![CDATA[
 Compilation can change a class as it can update the storage information. As such we need
-to check if the item has changed and save it out again if it has, this is already done
+to check If the item has changed and save it out again If it has, this is already done
 by <method>OnAfterSave</method> so just call this.]]></Description>
 <FormalSpec>InternalName:%String</FormalSpec>
 <ReturnType>%Status</ReturnType>
@@ -123,7 +198,7 @@ Called to add this item to source control</Description>
  
  // adding a package :
  // TODO fix that
- Set sc=$system.OBJ.ExportAllClassesIndividual(..ExternalName(InternalName),"-d/diffexport",,,InternalName,1)
+ Set sc=$system.OBJ.ExportAllClassesIndividual(..ExternalName(InternalName),"-d/dIffexport",,,InternalName,1)
  If $$$ISOK(sc) {
   Write !,"Exported Package '",InternalName,"' to '",..ExternalName(InternalName),"'"
  } Else {
@@ -148,7 +223,7 @@ Called to add this item to source control</Description>
 <FormalSpec>InternalName:%String</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
- // Document is considered "InSourceControl" iff ExternalName exist on FS
+ // Document is considered "InSourceControl" Iff ExternalName exist on FS
  Set extName=##class(Studio.Extension.Utils).ExternalName(InternalName)
  Quit (extName'=""&&(##class(%File).Exists(extName)))
 ]]></Implementation>
