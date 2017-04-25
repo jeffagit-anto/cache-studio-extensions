@@ -4,29 +4,12 @@
 <TimeCreated>63812,6122.281244</TimeCreated>
 
 <Parameter name="SCROOTDIR">
-<Default>/Users/jantonio/GitHub/se-fr</Default>
+<Default>/Users/jantonio/GitHub/cache-studio-extensions</Default>
 </Parameter>
 
-<UDLText name="T">
-<Content><![CDATA[
-// TODO normalize all names ?
-
-]]></Content>
-</UDLText>
-
-<Method name="SetCurrentProjectName">
-<ClassMethod>1</ClassMethod>
-<FormalSpec>InternalName:%String</FormalSpec>
-<Implementation><![CDATA[	Set ^StudioExtensionFileSync("currentProjectName")=$piece(InternalName,".",1,*-1)
-]]></Implementation>
-</Method>
-
-<Method name="GetCurrentProjectName">
-<ClassMethod>1</ClassMethod>
-<ReturnType>%String</ReturnType>
-<Implementation><![CDATA[	Quit $get(^StudioExtensionFileSync("currentProjectName"))
-]]></Implementation>
-</Method>
+<Parameter name="PRODNAME">
+<Default>ROANNE.Production.Production</Default>
+</Parameter>
 
 <Method name="ExternalName">
 <Description><![CDATA[
@@ -40,21 +23,31 @@ This package's subitems (classes, sub-packages, and so on) will be sync'ed below
 <FormalSpec>InternalName:%String</FormalSpec>
 <ReturnType>%String</ReturnType>
 <Implementation><![CDATA[
-	Set projectName = ..GetCurrentProjectName()
-	Quit:""=projectName ""
-	
 	Set name=$piece(InternalName,".",1,*-1),ext=..GetExtension(InternalName)
 	// TODO if ext="" (case of package) ?
-	If name="" Quit ""
+
+	// cannot work with an empty name
+	Return:""=name ""
+	
+	// manage CLS only
+	Return:'..IsCLS(InternalName) ""
+	
+	// pas de Production en source
+	Return:..IsProduction(InternalName) ""
+
 	// remove head separator if any
 	If $extract(name)="/"||($extract(name)="\") Set name=$extract(name,2,*)
-	If $$$isWINDOWS {
-		Quit:"pkg"=ext ..#SCROOTDIR_projectName_"\"_$translate(name,"./","\\")_"\"
-		Quit ..#SCROOTDIR_projectName_"\"_ext_"\"_$translate(name,"./","\\")_".xml"
-	} Else {
-		Quit:"pkg"=ext ..#SCROOTDIR_projectName_"/"_$translate(name,".\","//")_"/"
-		Quit ..#SCROOTDIR_projectName_"/"_ext_"/"_$translate(name,".\","//")_".xml"
-	}
+	
+	// now return a directory or a file name, depending on cas package/not package
+	// alls the . are tr'ed to /, making FQDN like pck1.subpck1.cls1 tr'ed to pck1/subpck1/cls1
+	// in the case of an internaleNAme that is not a package :
+	//  - all returned filename ends up with .xml extension
+	//  - a file hierarchy is maintained with cls/prj/bpl/mac/rul ... at its top
+	Set FS=$S($$$isWINDOWS :"\",1:"/")
+	// package case :
+	Return:..IsPKG(InternalName) ##class(%File).NormalizeDirectory($translate(name,".",FS),..#SCROOTDIR)
+	// file case:
+	Return ##class(%File).NormalizeFilename(ext_FS_$translate(name,".",FS)_".xml",..#SCROOTDIR)
 ]]></Implementation>
 </Method>
 
@@ -74,6 +67,22 @@ This package's subitems (classes, sub-packages, and so on) will be sync'ed below
 ]]></Implementation>
 </Method>
 
+<Method name="IsCLS">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>InternalName:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[	Quit "cls"=..GetExtension(InternalName)
+]]></Implementation>
+</Method>
+
+<Method name="IsProduction">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>InternalName:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[	Quit ..#PRODNAME_".CLS" = InternalName
+]]></Implementation>
+</Method>
+
 <Method name="IsPKG">
 <ClassMethod>1</ClassMethod>
 <FormalSpec>InternalName:%String</FormalSpec>
@@ -81,34 +90,5 @@ This package's subitems (classes, sub-packages, and so on) will be sync'ed below
 <Implementation><![CDATA[	Quit "pkg"=..GetExtension(InternalName)
 ]]></Implementation>
 </Method>
-
-<UDLText name="T">
-<Content><![CDATA[
-/*
-ClassMethod GetProjectName(InternalName As %String, Output projectName = "") As %Status
-{
-	// TODO : try by InternalName first, and by lastmodified next
-	
-	// TODO : by InternalName:
-	
-	// by lastmodified:
-	Set result=##class(%ResultSet).%New("%DynamicQuery:SQL")
-	Set sc=result.Prepare("select Name from %studio.project where lastmodified = (select max(lastmodified) from %studio.project)")
-	If $$$ISERR(sc) Do DisplayError^%apiOBJ(sc) Quit sc
-	Set sc=result.Execute()
-	If $$$ISERR(sc) Do DisplayError^%apiOBJ(sc) Quit sc
-	Set rowCounter=0
-	While result.Next(.sc) {
-		If $$$ISERR(sc) Quit
-		Set projectName=$get(result.Data("Name"))
-		Set rowCounter=rowCounter+1
-	}
-	If ($$$ISERR(sc)) Do DisplayError^%apiOBJ(sc) Quit sc
-	If (rowCounter'=1) Quit $$$ERROR(5808,"too many project name for this resource")
-	Quit $$$OK
-}
-*/
-]]></Content>
-</UDLText>
 </Class>
 </Export>
