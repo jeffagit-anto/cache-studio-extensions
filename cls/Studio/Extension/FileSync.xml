@@ -6,8 +6,7 @@
 This class is meant to synchronize Caché Documents with a FileSystem trough Studio hooks
 Source Control may then be implemented through FS integration and adequate client
 Note : initialcode must be exploded on a FS, and the path to this rot directory need to be setted]]></Description>
-<ProcedureBlock>1</ProcedureBlock>
-<Super>%Studio.SourceControl.Base</Super>
+<Super>%Studio.Extension.Base</Super>
 <TimeCreated>59241,41418</TimeCreated>
 
 <XData name="Menu">
@@ -96,6 +95,24 @@ control the display of contextual source menu</Description>
 ]]></Implementation>
 </Method>
 
+<Method name="UserAction">
+<Description>
+called on each user's action ; menu's included</Description>
+<FormalSpec><![CDATA[Type:%Integer,Name:%String,InternalName:%String,SelectedText:%String,&Action:%String,&Target:%String,&Msg:%String,&Reload:%Boolean]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	#dim ec As %Status = $$$OK
+	#dim menu As %Status = $Piece(Name, ",", 1)
+	// do not override action from non source control's menu
+	if menu '= "%SourceMenu", menu'="%SourceMenuContext" {
+		quit $$$OK
+	}
+	set InternalName = ##class(FileSyncUtils).NormalizeInternalName(InternalName)
+	set ec = ##class(FileSyncUtils).UserAction(InternalName, Name, .Target, .Action, .Reload)
+	quit ec
+]]></Implementation>
+</Method>
+
 <Method name="Login">
 <Description>
 Perform any login step here.</Description>
@@ -165,6 +182,18 @@ tool can see what changes we have made.</Description>
 <FormalSpec>InternalName:%String,Object:%RegisteredObject</FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
+	// corner case 1 : we are saving a project that is NOT in source control
+	// we must export all the items of the project, and the project itself
+	// you cannot rely on the OnAddItemToProject method, as you may export a whole existing project
+	// this is taken into account when you 
+	
+	// case 2 : we are saving an item that not belongs to the current project
+	// we do nothing for that item : this avoid to export an item into the wrong place
+	
+	// regular case : we are saving an item that is 
+	// case 1.1
+	// check that item belongs to project
+	
 
  Set filename=##class(Studio.Extension.Utils).ExternalName(InternalName)
  If filename="" Quit $$$OK
@@ -227,6 +256,12 @@ Called to add this item to source control</Description>
 <FormalSpec>InternalName:%String</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
+	/*
+	// TODO check for generated classes
+		        if InternalName'="" && ($$$defClassKeyGet($$$StripExtension(InternalName),$$$cCLASSgeneratedby)'="") {
+		        set isInSourceControl = 0 // skip generated classes
+	        }
+	*/
  // Document is considered "InSourceControl" Iff ExternalName exist on FS
  Set extName=##class(Studio.Extension.Utils).ExternalName(InternalName)
  Quit (extName'=""&&(##class(%File).Exists(extName)))
